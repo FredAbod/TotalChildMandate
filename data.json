@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1",
+    "name": "Peculiar Ajayi",
+    "position": "Head Boy",
+    "votes": 0,
+    "image": "ajayi.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Sharon Olalekan",
+    "position": "Health Prefect",
+    "votes": 0,
+    "image": "jane.jpg"
+  },
+  {
+    "id": "3",
+    "name": "Hamirat Aina",
+    "position": "Head Girl",
+    "votes": 0,
+    "image": "jane.jpg"
+  },
+  {
+    "id": "4",
+    "name": "Obanijesu Arogundade",
+    "position": "Social Prefect",
+    "votes": 0,
+    "image": "jane.jpg"
+  },
+  {
+    "id": "5",
+    "name": "Zion Olalekan",
+    "position": "Library Prefect",
+    "votes": 0,
+    "image": "jane.jpg"
+  }
+]
