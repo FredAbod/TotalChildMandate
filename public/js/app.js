@@ -11,7 +11,7 @@ async function loadCandidates() {
         const candidates = await response.json();
         console.log('Candidates fetched:', candidates);
 
-        const candidateSection = document.querySelector('.card-container'); // Update selector
+        const candidateSection = document.querySelector('.card-container');
         if (!candidateSection) {
             throw new Error("Element with class 'card-container' not found in the DOM.");
         }
@@ -27,14 +27,14 @@ async function loadCandidates() {
         // Dynamically generate cards for each candidate
         candidates.forEach(candidate => {
             const card = document.createElement('div');
-            card.classList.add('vote-card');
+            card.classList.add('vote-card'); // Use the same class as in your HTML/CSS
             card.innerHTML = `
                 <img src="/images/${candidate.image}" alt="${candidate.name}" class="candidate-image">
                 <div class="card-content">
                     <h2>${candidate.name}</h2>
                     <p>${candidate.position}</p>
-                    <p>Votes: <span id="votes-${candidate.id}">${candidate.votes}</span></p>
-                    <button class="vote-button" onclick="vote('${candidate.id}')">Vote</button>
+                    <p class="vote-count">Votes: <span id="votes-${candidate._id}">${candidate.votes}</span></p>
+                    <button class="vote-button" onclick="vote('${candidate._id}')">Vote</button>
                 </div>
             `;
             candidateSection.appendChild(card);
@@ -45,8 +45,14 @@ async function loadCandidates() {
     }
 }
 
+
 // Handle voting
 async function vote(candidateId) {
+    if (!candidateId) {
+        alert('Candidate ID is missing!');
+        return;
+    }
+
     try {
         console.log('Voting for candidate:', candidateId);
 
@@ -57,13 +63,10 @@ async function vote(candidateId) {
             const updatedCandidate = await response.json();
             console.log('Updated Candidate:', updatedCandidate);
 
-            // Update the vote count dynamically
-            document.getElementById(`votes-${updatedCandidate.id}`).textContent = updatedCandidate.votes;
+            document.getElementById(`votes-${updatedCandidate._id}`).textContent = updatedCandidate.votes;
             alert(`Thank you for voting for ${updatedCandidate.name}!`);
         } else if (response.status === 403) {
             alert('You have already voted for this candidate!');
-        } else if (response.status === 404) {
-            alert('Candidate not found!');
         } else {
             alert('An error occurred. Please try again.');
         }
@@ -72,6 +75,7 @@ async function vote(candidateId) {
         alert('An error occurred. Please try again.');
     }
 }
+
 
 // Ensure the script runs after the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,17 +1,18 @@
 const express = require('express');
-const fs = require('fs');
+const mongoose = require('mongoose');
+const Candidate = require('./models/user.models');
 const path = require('path');
 const app = express();
 const PORT = 3000;
 
+// MongoDB connection
+mongoose.connect('mongodb+srv://fredrickbolutife:Z3O06ZMPTW5K2rDx@ch14.mubqlte.mongodb.net/votingApp')
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
 // Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Simulated Database
-const dbFile = path.join(__dirname, 'data.json');
-let candidates = JSON.parse(fs.readFileSync(dbFile, 'utf-8'));
-let voteTracker = {}; // { candidateId: [IP1, IP2, ...] }
 
 // Helper to get client IP
 const getClientIp = (req) => {
@@ -20,37 +21,47 @@ const getClientIp = (req) => {
 };
 
 // Get all candidates
-app.get('/candidates', (req, res) => {
-    res.json(candidates);
+app.get('/candidates', async (req, res) => {
+    try {
+        const candidates = await Candidate.find();
+        res.json(candidates);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching candidates' });
+    }
 });
 
 // Vote for a candidate
-app.post('/vote/:id', (req, res) => {
+
+
+// Voting endpoint
+app.post('/vote/:id', async (req, res) => {
     const { id } = req.params;
-    const ip = getClientIp(req);
+    const voterIp = getClientIp(req);
 
-    if (!voteTracker[id]) {
-        voteTracker[id] = [];
-    }
+    try {
+        const candidate = await Candidate.findById(id);
+        if (!candidate) {
+            return res.status(404).json({ message: 'Candidate not found' });
+        }
 
-    // Check if the IP has already voted for this candidate
-    if (voteTracker[id].includes(ip)) {
-        return res.status(403).json({ message: 'You have already voted for this candidate!' });
-    }
+        // Check if the voter has already voted
+        if (candidate.voters.includes(voterIp)) {
+            return res.status(403).json({ message: 'You have already voted for this candidate!' });
+        }
 
-    const candidate = candidates.find(c => c.id === id);
-
-    if (candidate) {
+        // Update votes and add voter IP
         candidate.votes += 1;
-        voteTracker[id].push(ip);
+        candidate.voters.push(voterIp);
 
-        fs.writeFileSync(dbFile, JSON.stringify(candidates, null, 2));
+        await candidate.save();
         res.json(candidate);
-    } else {
-        res.status(404).send('Candidate not found');
+    } catch (err) {
+        console.error('Error voting:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 
+// Start server
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
