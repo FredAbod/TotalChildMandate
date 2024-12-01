@@ -5,6 +5,9 @@ body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(to right, #6a11cb, #2575fc);
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the body takes full height of the viewport */
 }
 
 /* Header */
@@ -39,6 +42,8 @@ body {
     justify-content: center;
     gap: 20px;
     padding: 20px;
+    flex: 1; /* Allow the container to stretch and push the footer down */
+    padding-bottom: 60px; /* Add extra padding to avoid the footer overlapping */
 }
 
 /* Voting Cards */
@@ -102,9 +107,8 @@ body {
     color: white;
     text-align: center;
     padding: 10px 20px;
-    position: fixed;
-    bottom: 0;
     width: 100%;
+    margin-top: auto; /* Push the footer to the bottom naturally */
 }
 
 /* Responsive Design */
