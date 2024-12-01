@@ -11,27 +11,27 @@
     "name": "Sharon Olalekan",
     "position": "Health Prefect",
     "votes": 0,
-    "image": "jane.jpg"
+    "image": "sharron.jpg"
   },
   {
     "id": "3",
-    "name": "Hamirat Aina",
+    "name": "Amirat Aina",
     "position": "Head Girl",
     "votes": 0,
-    "image": "jane.jpg"
+    "image": "Amirat.jpg"
   },
   {
     "id": "4",
     "name": "Obanijesu Arogundade",
     "position": "Social Prefect",
     "votes": 0,
-    "image": "jane.jpg"
+    "image": "obanijesu.jpg"
   },
   {
     "id": "5",
     "name": "Zion Olalekan",
     "position": "Library Prefect",
     "votes": 0,
-    "image": "jane.jpg"
+    "image": "zion.jpg"
   }
 ]
